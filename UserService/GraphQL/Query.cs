@@ -24,5 +24,18 @@ namespace UserService.GraphQL
                 Username = p.UserName
             });
 
+        [Authorize]
+        public IQueryable<Profile> GetProfilesbyToken([Service] FoodDeliveringContext context, ClaimsPrincipal claimsPrincipal)
+        {
+            var userName = claimsPrincipal.Identity.Name;
+            var user = context.Users.Where(o => o.UserName == userName).FirstOrDefault();
+            if (user != null)
+            {
+                var profiles = context.Profiles.Where(o => o.UserId == user.Id);
+                return profiles.AsQueryable();
+            }
+            return new List<Profile>().AsQueryable();
+        }
+
     }
 }

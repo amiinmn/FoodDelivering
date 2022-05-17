@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UserService.Models
+namespace FoodService.Models
 {
     public partial class OrderDetail
     {
