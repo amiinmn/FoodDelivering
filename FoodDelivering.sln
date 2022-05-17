@@ -5,6 +5,10 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService\UserService.csproj", "{9E0D2FC8-8C42-4C54-8896-AE2BF063189E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodService", "FoodService\FoodService.csproj", "{D617D026-7785-467A-A890-679A3B5608A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "OrderService\OrderService.csproj", "{E5C4B0C8-361C-436F-ADF8-DB67B4A437C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{9E0D2FC8-8C42-4C54-8896-AE2BF063189E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E0D2FC8-8C42-4C54-8896-AE2BF063189E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E0D2FC8-8C42-4C54-8896-AE2BF063189E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D617D026-7785-467A-A890-679A3B5608A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D617D026-7785-467A-A890-679A3B5608A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D617D026-7785-467A-A890-679A3B5608A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D617D026-7785-467A-A890-679A3B5608A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5C4B0C8-361C-436F-ADF8-DB67B4A437C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5C4B0C8-361C-436F-ADF8-DB67B4A437C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5C4B0C8-361C-436F-ADF8-DB67B4A437C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5C4B0C8-361C-436F-ADF8-DB67B4A437C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
