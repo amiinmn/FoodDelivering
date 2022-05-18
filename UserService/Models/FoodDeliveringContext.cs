@@ -40,9 +40,11 @@ namespace UserService.Models
             {
                 entity.ToTable("Courier");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-                entity.Property(e => e.Location)
+                entity.Property(e => e.Phone)
                     .HasMaxLength(50)
                     .IsUnicode(false);
             });
@@ -67,7 +69,6 @@ namespace UserService.Models
                 entity.HasOne(d => d.Courier)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CourierId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Courier");
 
                 entity.HasOne(d => d.User)

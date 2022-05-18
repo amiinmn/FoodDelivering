@@ -1,12 +1,5 @@
-﻿using System.Linq;
-using HotChocolate;
-using HotChocolate.Types;
-using HotChocolate.AspNetCore.Authorization;
-
-using Microsoft.EntityFrameworkCore;
+﻿using HotChocolate.AspNetCore.Authorization;
 using System.Security.Claims;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using UserService.Models;
 
 namespace UserService.GraphQL

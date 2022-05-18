@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace FoodService.Models
+namespace OrderService.Models
 {
     public partial class FoodDeliveringContext : DbContext
     {

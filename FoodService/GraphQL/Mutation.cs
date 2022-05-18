@@ -1,17 +1,5 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using HotChocolate;
-using System;
-using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
+﻿using FoodService.Models;
 using HotChocolate.AspNetCore.Authorization;
-using System.Security.Claims;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-using FoodService.Models;
 
 namespace FoodService.GraphQL
 {
@@ -37,7 +25,7 @@ namespace FoodService.GraphQL
 
             return ret.Entity;
         }
-        public async Task<Food> GetProductByIdAsync(
+        public async Task<Food> GetFoodByIdAsync(
             int id,
             [Service] FoodDeliveringContext context)
         {
@@ -46,7 +34,7 @@ namespace FoodService.GraphQL
             return await Task.FromResult(product);
         }
         [Authorize(Roles = new[] { "MANAGER" })]
-        public async Task<Food> UpdateProductAsync(
+        public async Task<Food> UpdateFoodAsync(
             FoodInput input,
             [Service] FoodDeliveringContext context)
         {

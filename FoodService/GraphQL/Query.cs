@@ -1,13 +1,6 @@
-﻿using System.Linq;
-using HotChocolate;
-using HotChocolate.Types;
+﻿using FoodService.Models;
 using HotChocolate.AspNetCore.Authorization;
-
-using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-using FoodService.Models;
 
 namespace FoodService.GraphQL
 {
@@ -15,7 +8,26 @@ namespace FoodService.GraphQL
     {
         [Authorize(Roles = new[] { "MANAGER" })]
         public IQueryable<Food> GetFoods([Service] FoodDeliveringContext context) =>
-            context.Foods;              
+            context.Foods;
 
-    }
+        [Authorize]
+        public IQueryable<Food> GetFoods([Service] FoodDeliveringContext context, ClaimsPrincipal claimsPrincipal)
+        {
+            var userName = claimsPrincipal.Identity.Name;
+
+            // check manager role ?
+            var managerRole = claimsPrincipal.Claims.Where(o => o.Type == ClaimTypes.Role).FirstOrDefault();
+            var user = context.Users.Where(o => o.UserName == userName).FirstOrDefault();
+            if (user != null)
+            {
+                if (managerRole.Value == "MANAGER" || managerRole.Value == "ADMIN")
+                {
+                    return context.Foods;
+                }
+                var foods = context.Foods;
+                return foods.AsQueryable();
+            }
+            return new List<Food>().AsQueryable();
+        }
+    }    
 }

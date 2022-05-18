@@ -1,16 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using HotChocolate;
-using System;
+﻿using HotChocolate.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-
-using HotChocolate.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
+using System.Text;
 using UserService.Models;
 
 namespace UserService.GraphQL

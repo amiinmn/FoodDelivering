@@ -11,8 +11,9 @@ namespace UserService.Models
         }
 
         public int Id { get; set; }
-        public string Location { get; set; } = null!;
-        public bool OrderComplete { get; set; }
+        public string Name { get; set; } = null!;
+        public string Phone { get; set; } = null!;
+        public bool Status { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }
