@@ -58,14 +58,14 @@ namespace FoodService.GraphQL
             int id,
             [Service] FoodDeliveringContext context)
         {
-            var product = context.Foods.Where(o => o.Id == id).FirstOrDefault();
-            if (product != null)
+            var food = context.Foods.Where(o => o.Id == id).FirstOrDefault();
+            if (food != null)
             {
-                context.Foods.Remove(product);
+                context.Foods.Remove(food);
                 await context.SaveChangesAsync();
             }
 
-            return await Task.FromResult(product);
+            return await Task.FromResult(food);
         }
     }
 }

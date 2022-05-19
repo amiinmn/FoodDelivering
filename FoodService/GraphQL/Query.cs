@@ -6,11 +6,11 @@ namespace FoodService.GraphQL
 {
     public class Query
     {
-        [Authorize(Roles = new[] { "MANAGER" })]
-        public IQueryable<Food> GetFoods([Service] FoodDeliveringContext context) =>
-            context.Foods;
+        //[Authorize(Roles = new[] { "MANAGER" })]
+        //public IQueryable<Food> GetFoods([Service] FoodDeliveringContext context) =>
+        //    context.Foods;
 
-        [Authorize]
+        [Authorize(Roles = new[] { "MANAGER", "BUYER" })]
         public IQueryable<Food> GetFoods([Service] FoodDeliveringContext context, ClaimsPrincipal claimsPrincipal)
         {
             var userName = claimsPrincipal.Identity.Name;
@@ -20,7 +20,7 @@ namespace FoodService.GraphQL
             var user = context.Users.Where(o => o.UserName == userName).FirstOrDefault();
             if (user != null)
             {
-                if (managerRole.Value == "MANAGER" || managerRole.Value == "ADMIN")
+                if (managerRole.Value == "MANAGER" || managerRole.Value == "BUYER")
                 {
                     return context.Foods;
                 }

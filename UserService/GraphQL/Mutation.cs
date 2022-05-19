@@ -152,5 +152,23 @@ namespace UserService.GraphQL
 
         }
 
+        [Authorize(Roles = new[] { "ADMIN" })]
+        public async Task<UserRole> UpdateUserRoleAsync(
+            UserRoleInput input,
+            [Service] FoodDeliveringContext context)
+        {
+            var userRole = context.UserRoles.Where(o => o.Id == input.Id).FirstOrDefault();
+            if (userRole != null)
+            {
+                userRole.UserId = input.UserId;
+                userRole.RoleId = input.RoleId;
+
+                context.UserRoles.Update(userRole);
+                await context.SaveChangesAsync();
+            }
+
+            return await Task.FromResult(userRole);
+        }
+
     }
  }

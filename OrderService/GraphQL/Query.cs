@@ -30,7 +30,6 @@ namespace OrderService.GraphQL
                 return orders.AsQueryable();
             }
 
-
             return new List<Order>().AsQueryable();
         }
 

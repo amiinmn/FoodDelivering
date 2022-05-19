@@ -58,6 +58,7 @@ namespace OrderService.GraphQL
                         Code = Guid.NewGuid().ToString(), // generate random chars using GUID
                         UserId = user.Id,
                         CourierId = user.Id
+                        //Status = user.
                     };
                                      
                     foreach (var item in input.Details)
@@ -85,10 +86,41 @@ namespace OrderService.GraphQL
                 transaction.Rollback();
             }
 
-
-
             return input;
         }
 
+        [Authorize(Roles = new[] { "MANAGER" })]
+        public async Task<Order> UpdateOrderAsync(
+            OrderData input,
+            [Service] FoodDeliveringContext context)
+        {
+            var order = context.Orders.Where(o => o.Id == input.Id).FirstOrDefault();
+            if (order != null)
+            {
+                //order.Code = input.Code;
+                //order.UserId = input.UserId;
+                //order.CourierId = input.CourierId;
+
+                context.Orders.Update(order);
+                await context.SaveChangesAsync();
+            }
+
+            return await Task.FromResult(order);
+        }
+
+        [Authorize(Roles = new[] { "MANAGER" })]
+        public async Task<Order> DeleteOrderByIdAsync(
+            int id,
+            [Service] FoodDeliveringContext context)
+        {
+            var order = context.Orders.Where(o => o.Id == id).FirstOrDefault();
+            if (order != null)
+            {
+                context.Orders.Remove(order);
+                await context.SaveChangesAsync();
+            }
+
+            return await Task.FromResult(order);
+        }
     }
 }

@@ -30,5 +30,14 @@ namespace UserService.GraphQL
             return new List<Profile>().AsQueryable();
         }
 
+        [Authorize(Roles = new[] { "ADMIN" })] // dapat diakses dengan role admin
+        public IQueryable<UserRole> GetUserRoles([Service] FoodDeliveringContext context) =>
+            context.UserRoles.Select(p => new UserRole()
+            {
+                Id = p.Id,
+                UserId = p.UserId,
+                RoleId = p.RoleId
+            });
+
     }
 }
