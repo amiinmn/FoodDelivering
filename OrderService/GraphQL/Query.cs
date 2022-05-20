@@ -40,7 +40,7 @@ namespace OrderService.GraphQL
             context.Orders.Include(o => o.OrderDetails);
 
         [Authorize(Roles = new[] { "BUYER" })]
-        public IQueryable<Order> GetOrderbyToken(
+        public IQueryable<Order> GetOrderbyBuyer(
             [Service] FoodDeliveringContext context,
             ClaimsPrincipal claimsPrincipal)
         {
@@ -50,6 +50,20 @@ namespace OrderService.GraphQL
             {
                 var profiles = context.Orders.Where(o => o.UserId == user.Id);
                 return profiles.AsQueryable();
+            }
+            return new List<Order>().AsQueryable();
+        }
+
+        [Authorize(Roles = new[] { "BUYER" })]
+        public IQueryable<Order> TrackingOrderByBuyer([Service] FoodDeliveringContext context, ClaimsPrincipal claimsPrincipal)
+        {
+            var username = claimsPrincipal.Identity.Name;
+            var user = context.Users.Where(o => o.UserName == username).FirstOrDefault();
+            if (user != null)
+            {
+                var orders = context.Orders.Where(o => o.UserId == user.Id).Include(o => o.OrderDetails).OrderBy(o => o.Id).LastOrDefault();
+                var latestOrder = context.Orders.Where(o => o.Id == orders.Id);
+                return latestOrder.AsQueryable();
             }
             return new List<Order>().AsQueryable();
         }

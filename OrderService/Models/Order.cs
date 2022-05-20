@@ -14,8 +14,7 @@ namespace OrderService.Models
         public int UserId { get; set; }
         public string Code { get; set; } = null!;
         public int CourierId { get; set; }
-        public bool Status { get; set; }
-        public double? Longtitude { get; set; }
+        public double? Longitude { get; set; }
         public double? Latitude { get; set; }
 
         public virtual Courier Courier { get; set; } = null!;

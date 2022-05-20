@@ -11,7 +11,8 @@ namespace OrderService.Models
         public string? Code { get; set; }
         public int UserId { get; set; }
         public int CourierId { get; set; }
-        public bool Status { get; set; }
+        public double? Longitude { get; set; }
+        public double? Latitude { get; set; }
 
         public List<OrderDetailData> Details { get; set; }
 

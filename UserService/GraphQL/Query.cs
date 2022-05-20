@@ -45,27 +45,15 @@ namespace UserService.GraphQL
             return new List<Profile>().AsQueryable();
         }
 
-        //[Authorize(Roles = new[] { "MANAGER" })]
-        //public IQueryable<UserData> GetCouriers(
-        //    [Service] FoodDeliveringContext context) =>
-        //    context.Users.Select(p => new UserData()
-        //    {
-        //        Id = p.Id,
-        //        FullName = p.FullName,
-        //        Email = p.Email,
-        //        Username = p.UserName
-        //    });
 
         [Authorize(Roles = new[] { "MANAGER" })]
-        public IQueryable<UserData> GetCouriers(
-            [Service] FoodDeliveringContext context) =>
-            context.Users.Select(p => new UserData()
-            {
-                Id = p.Id,
-                FullName = p.FullName,
-                Email = p.Email,
-                Username = p.UserName
-            });
+        public IQueryable<User> GetCouriers(
+            [Service] FoodDeliveringContext context)
+        {
+            var userRole = context.Roles.Where(k => k.Name == "COURIER").FirstOrDefault();
+            var courier = context.Users.Where(k => k.UserRoles.Any(o => o.RoleId == userRole.Id));
+            return courier.AsQueryable();
+        }
 
     }
 }

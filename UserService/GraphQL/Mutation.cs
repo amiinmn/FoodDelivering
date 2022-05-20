@@ -40,8 +40,6 @@ namespace UserService.GraphQL
             var ret = context.Users.Add(newUser);
             await context.SaveChangesAsync();
 
-
-
             return await Task.FromResult(new UserData
             {
                 Id = newUser.Id,
@@ -262,7 +260,26 @@ namespace UserService.GraphQL
             }
 
             return await Task.FromResult(userRole);
-        }        
+        }
 
+        [Authorize(Roles = new[] { "MANAGER" })]
+        public async Task<Courier> AddCourierStatusAsync(
+            CourierStatusInput input,
+            [Service] FoodDeliveringContext context)
+        {
+            // EF
+            var courier = new Courier
+            {
+                Status = "AVAILABLE",
+                UserId = input.UserId,
+                Latitude = input.Latitude,
+                Longitude = input.Longitude
+            };
+
+            var ret = context.Couriers.Add(courier);
+            await context.SaveChangesAsync();
+
+            return ret.Entity;
+        }
     }
  }
