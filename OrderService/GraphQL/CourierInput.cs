@@ -5,6 +5,6 @@
         int? Id,
         string Name,
         string Phone,
-        bool Status
+        int UserId
     );
 }

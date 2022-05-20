@@ -10,6 +10,7 @@ namespace UserService.GraphQL
 {
     public class Mutation
     {
+        //===========================REGISTER USER AS BUYER FOR DEFAULT===================================//
         public async Task<UserData> RegisterUserAsync(
         RegisterUser input,
         [Service] FoodDeliveringContext context)
@@ -50,6 +51,7 @@ namespace UserService.GraphQL
             });
         }
 
+        //========================================LOGIN USER==============================================//
         public async Task<UserToken> LoginAsync(
             LoginUser input,
             [Service] IOptions<TokenSettings> tokenSettings, // setting token
@@ -99,6 +101,7 @@ namespace UserService.GraphQL
             return await Task.FromResult(new UserToken(null, null, Message: "Username or password was invalid"));
         }
 
+        //========================================UPDETE USER BY ADMIN==========================================//
         [Authorize(Roles = new[] { "ADMIN" })]
         public async Task<User> UpdateUserAsync(
             UserInput input,
@@ -119,6 +122,7 @@ namespace UserService.GraphQL
             return await Task.FromResult(user);
         }
 
+        //========================================DELETE USER BY ADMIN==========================================//
         [Authorize(Roles = new[] { "ADMIN" })]
         public async Task<User> DeleteUserByIdAsync(
             int id,
@@ -133,6 +137,7 @@ namespace UserService.GraphQL
             return await Task.FromResult(user);
         }
 
+        //========================================ADD PROFILE BY USER==========================================//
         [Authorize]
         public async Task<Profile> AddProfileAsync(
             ProfilesInput input,
@@ -152,6 +157,7 @@ namespace UserService.GraphQL
 
         }
 
+        //========================================UPDATE USER ROLE BY ADMIN=====================================//
         [Authorize(Roles = new[] { "ADMIN" })]
         public async Task<UserRole> UpdateUserRoleAsync(
             UserRoleInput input,
@@ -169,6 +175,94 @@ namespace UserService.GraphQL
 
             return await Task.FromResult(userRole);
         }
+
+        //===================================CHANGE PASSWORD BY USER===========================================//
+        [Authorize]
+        public async Task<UserData> ChangePasswordAsync(
+            ChangePassword input,
+            [Service] FoodDeliveringContext context,
+            ClaimsPrincipal claimsPrincipal)
+        {
+            var userToken = claimsPrincipal.Identity;
+            var user = context.Users.Where(u => u.UserName == userToken.Name).FirstOrDefault();
+            if (user != null)
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(input.Password);
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+            }
+            return await Task.FromResult(new UserData
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Username = user.UserName,
+                Email = user.Email,
+            });
+        }
+
+
+        //=======================================MANAGE COURIER=========================================//
+        [Authorize(Roles = new[] { "MANAGER" })]
+        public async Task<UserData> AddCourierAsync(
+        RegisterUser input,
+        [Service] FoodDeliveringContext context)
+        {
+            var user = context.Users.Where(o => o.UserName == input.UserName).FirstOrDefault();
+            if (user != null)
+            {
+                return await Task.FromResult(new UserData());
+            }
+            var newUser = new User
+            {
+                FullName = input.FullName,
+                Email = input.Email,
+                UserName = input.UserName,
+                Password = BCrypt.Net.BCrypt.HashPassword(input.Password) // encrypt password
+            };
+            var memberRole = context.Roles.Where(m => m.Name == "COURIER").FirstOrDefault();
+            if (memberRole == null)
+                throw new Exception("Invalid Role");
+            var userRole = new UserRole
+            {
+                RoleId = memberRole.Id,
+                UserId = newUser.Id
+            };
+            newUser.UserRoles.Add(userRole);
+            // EF
+            var ret = context.Users.Add(newUser);
+            await context.SaveChangesAsync();
+
+            return await Task.FromResult(new UserData
+            {
+                Id = newUser.Id,
+                Username = newUser.UserName,
+                Email = newUser.Email,
+                FullName = newUser.FullName
+            });
+        }
+
+        //==========================================UPDATE COURIER BY MANAGER=============================//
+        [Authorize(Roles = new[] { "MANAGER" })]
+        public async Task<UserRole> UpdateCourierAsync(
+            UserInput input,
+            [Service] FoodDeliveringContext context)
+        {
+            
+            var userRole = context.UserRoles.Where(o => o.Id == input.Id).FirstOrDefault();
+            var user = context.Users.Where(o => o.Id == input.Id && userRole.RoleId == 4).FirstOrDefault();
+            if (userRole != null)
+            {
+                user.FullName = input.FullName;
+                user.UserName = input.UserName;
+                user.Email = input.Email;
+                user.Password = BCrypt.Net.BCrypt.HashPassword(input.Password);
+
+                context.Users.Update(user);
+                await context.SaveChangesAsync();
+            }
+
+            return await Task.FromResult(userRole);
+        }        
 
     }
  }

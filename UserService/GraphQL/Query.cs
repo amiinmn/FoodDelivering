@@ -5,10 +5,11 @@ using UserService.Models;
 namespace UserService.GraphQL
 {
     public class Query
-    {     
-
-        [Authorize(Roles = new[] { "ADMIN" })] // dapat diakses kalau sudah login
-        public IQueryable<UserData> GetUsers([Service] FoodDeliveringContext context) =>
+    {
+        //-------------------------------------VIEW ALL USER BY ADMIN--------------------------------------------//
+        [Authorize(Roles = new[] { "ADMIN" })] 
+        public IQueryable<UserData> GetUsers(
+            [Service] FoodDeliveringContext context) =>
             context.Users.Select(p => new UserData()
             {
                 Id = p.Id,
@@ -17,8 +18,22 @@ namespace UserService.GraphQL
                 Username = p.UserName
             });
 
+        //-------------------------------------VIEW ALL USER ROLE BY ADMIN---------------------------------------//
+        [Authorize(Roles = new[] { "ADMIN" })] 
+        public IQueryable<UserRole> GetUserRoles(
+            [Service] FoodDeliveringContext context) =>
+            context.UserRoles.Select(p => new UserRole()
+            {
+                Id = p.Id,
+                UserId = p.UserId,
+                RoleId = p.RoleId
+            });
+
+        //-------------------------------------VIEW PROFILE BY TOKEN--------------------------------------------//
         [Authorize]
-        public IQueryable<Profile> GetProfilesbyToken([Service] FoodDeliveringContext context, ClaimsPrincipal claimsPrincipal)
+        public IQueryable<Profile> GetProfilesbyToken(
+            [Service] FoodDeliveringContext context, 
+            ClaimsPrincipal claimsPrincipal)
         {
             var userName = claimsPrincipal.Identity.Name;
             var user = context.Users.Where(o => o.UserName == userName).FirstOrDefault();
@@ -30,13 +45,26 @@ namespace UserService.GraphQL
             return new List<Profile>().AsQueryable();
         }
 
-        [Authorize(Roles = new[] { "ADMIN" })] // dapat diakses dengan role admin
-        public IQueryable<UserRole> GetUserRoles([Service] FoodDeliveringContext context) =>
-            context.UserRoles.Select(p => new UserRole()
+        //[Authorize(Roles = new[] { "MANAGER" })]
+        //public IQueryable<UserData> GetCouriers(
+        //    [Service] FoodDeliveringContext context) =>
+        //    context.Users.Select(p => new UserData()
+        //    {
+        //        Id = p.Id,
+        //        FullName = p.FullName,
+        //        Email = p.Email,
+        //        Username = p.UserName
+        //    });
+
+        [Authorize(Roles = new[] { "MANAGER" })]
+        public IQueryable<UserData> GetCouriers(
+            [Service] FoodDeliveringContext context) =>
+            context.Users.Select(p => new UserData()
             {
                 Id = p.Id,
-                UserId = p.UserId,
-                RoleId = p.RoleId
+                FullName = p.FullName,
+                Email = p.Email,
+                Username = p.UserName
             });
 
     }

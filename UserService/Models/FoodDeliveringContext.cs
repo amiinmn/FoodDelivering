@@ -39,14 +39,6 @@ namespace UserService.Models
             modelBuilder.Entity<Courier>(entity =>
             {
                 entity.ToTable("Courier");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Phone)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Food>(entity =>
