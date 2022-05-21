@@ -1,4 +1,5 @@
 ﻿using HotChocolate.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -280,6 +281,21 @@ namespace UserService.GraphQL
             await context.SaveChangesAsync();
 
             return ret.Entity;
+        }
+
+        [Authorize(Roles = new[] { "MANAGER" })]
+        public async Task<User> DeleteCourierAsync(
+            int id,
+            [Service] FoodDeliveringContext context)
+        {
+            var user = context.Users.Where(o => o.Id == id).Include(o => o.UserRoles).FirstOrDefault();
+            if (user != null)
+            {
+                context.Users.Remove(user);
+                await context.SaveChangesAsync();
+            }
+
+            return await Task.FromResult(user);
         }
     }
  }
